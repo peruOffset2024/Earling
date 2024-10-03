@@ -1,6 +1,8 @@
+import 'package:earling/Screens/shake_transition.dart';
 import 'package:earling/models/nike_shoes.dart';
 import 'package:earling/views/nike_shoes_details.dart';
 import 'package:flutter/material.dart';
+
 
 class MainNikeShoesStore extends StatelessWidget {
   MainNikeShoesStore({super.key});
@@ -121,14 +123,19 @@ class NikeShoesItem extends StatelessWidget {
                   alignment: Alignment.topCenter,
                   child: Hero(
                     tag:  'number_${shoesItem.model}',
-                    child: SizedBox(
-                      height: itenHeight * 0.6,
-                      child: Material(
-                        color: Colors.transparent,
-                        child: FittedBox(
-                          child: Text(
-                            shoesItem.modelNumber.toString(),
-                            style: TextStyle(color: Colors.black.withOpacity(0.5)),
+                    child: ShakeTransition(
+                      //axis:  Axis.vertical
+                      //duration const Duration(milliseconds: 1200),
+                      //offset:20
+                      child: SizedBox(
+                        height: itenHeight * 0.6,
+                        child: Material(
+                          color: Colors.transparent,
+                          child: FittedBox(
+                            child: Text(
+                              shoesItem.modelNumber.toString(),
+                              style: TextStyle(color: Colors.black.withOpacity(0.5)),
+                            ),
                           ),
                         ),
                       ),

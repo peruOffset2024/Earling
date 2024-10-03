@@ -1,10 +1,24 @@
+import 'package:earling/Screens/shake_transition.dart';
 import 'package:earling/models/nike_shoes.dart';
+import 'package:earling/views/Home/nike_shopping_card.dart';
 import 'package:flutter/material.dart';
 
 class NikeShoesDetails extends StatelessWidget {
   final ValueNotifier<bool> notifierBottonBarVisible = ValueNotifier(false);
 
   NikeShoesDetails({super.key});
+
+  void _openShoppingCart(BuildContext context) async{
+    notifierBottonBarVisible.value = false;
+    await Navigator.of(context).push(PageRouteBuilder(pageBuilder: (_, animation1, __){
+      return FadeTransition(opacity: animation1,
+      child: NikeShoppingCard( shoes: shoes.first,),
+      );
+    }));
+    notifierBottonBarVisible.value = true;
+  }
+
+
 
   Widget _buildCarrousel(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -14,7 +28,7 @@ class NikeShoesDetails extends StatelessWidget {
         children: [
           Positioned.fill(
               child: Hero(
-            tag: 'background_', // aqui fijate
+            tag: 'background_${shoes[1]}', // aqui fijate
             child: Container(
               color: Color(0xFFF6F6F6),
             ),
@@ -23,11 +37,19 @@ class NikeShoesDetails extends StatelessWidget {
             left: 70,
             right: 70,
             top: 10,
-            child: Material(
-              child: FittedBox(
-                child: Text(
-                  '${shoes[1]}',
-                  style: TextStyle(color: Colors.black.withOpacity(0.5)),
+            child: Hero(
+              tag: 'number_${shoes[1]}',
+              child: ShakeTransition(
+                //axis: Axi.Vertical,
+                duration: Duration(milliseconds: 1400),
+                child: Material(
+                  color: Colors.transparent,
+                  child: FittedBox(
+                    child: Text(
+                      'number_${shoes[1]}',
+                      style: TextStyle(color: Colors.black.withOpacity(0.05), fontWeight: FontWeight.bold),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -36,14 +58,18 @@ class NikeShoesDetails extends StatelessWidget {
             itemCount: shoes.length,
             itemBuilder: (context, index) {
               final itemShoes = shoes[index];
-              final tag = 'image_${itemShoes.model}_${index}';
+              final tag = index == 0 ? 'image_${itemShoes.model}': 'image_${itemShoes.model}_${index}';
               return Container(
                 alignment: Alignment.center,
-                child: Hero(
-                  tag: tag,
-                  child: Image.asset(
-                    height: 200,
-                    itemShoes.images[index % itemShoes.images.length],
+                child: ShakeTransition(
+                  //axis:Axis.Vertical,
+                  duration: index ==0 ? const Duration(milliseconds: 900) : Duration.zero,
+                  child: Hero(
+                    tag: tag,
+                    child: Image.asset(
+                      height: 200,
+                      itemShoes.images[index % itemShoes.images.length],
+                    ),
                   ),
                 ),
               );
@@ -79,75 +105,84 @@ class NikeShoesDetails extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 _buildCarrousel(context),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                 Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        children: [
-                          Text('Zapatilla model',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600,
-                              )),
-                          Spacer(),
-                          Expanded(
-                              child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text('\$195',
-                                  style: TextStyle(
-                                      color: Colors.red,
-                                      decoration: TextDecoration.lineThrough,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 13)),
-                              Text('\$170',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 13))
-                            ],
-                          ))
-                        ],
+                      ShakeTransition(
+                        child: Row(
+                          children: [
+                            Text('Zapatilla model',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 18
+                                )),
+                            Spacer(),
+                            Expanded(
+                                child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text('\$195',
+                                    style: TextStyle(
+                                        color: Colors.red,
+                                        decoration: TextDecoration.lineThrough,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 13)),
+                                Text('\$170',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 13))
+                              ],
+                            ))
+                          ],
+                        ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
-                      Text(
-                        'AVALIBLE SIZES',
-                        style: TextStyle(fontSize: 11),
+                      ShakeTransition(
+                        duration: Duration(milliseconds: 1100),
+                        child: const Text(
+                          'AVALIBLE SIZES',
+                          style: TextStyle(fontSize: 11),
+                        ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          _ShowSizeItem(
-                            texto: '6',
-                          ),
-                          _ShowSizeItem(
-                            texto: '7',
-                          ),
-                          _ShowSizeItem(
-                            texto: '8',
-                          ),
-                          _ShowSizeItem(
-                            texto: '9',
-                          ),
-                          _ShowSizeItem(
-                            texto: '10',
-                          ),
-                        ],
+                      ShakeTransition(
+                        duration: Duration(milliseconds: 1100),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            _ShowSizeItem(
+                              texto: '6',
+                            ),
+                            _ShowSizeItem(
+                              texto: '7',
+                            ),
+                            _ShowSizeItem(
+                              texto: '8',
+                            ),
+                            _ShowSizeItem(
+                              texto: '9',
+                            ),
+                            _ShowSizeItem(
+                              texto: '10',
+                            ),
+                          ],
+                        ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
-                      Text(
+                      const Text(
                         'DESCRIPTION',
                         style: TextStyle(fontSize: 11),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       )
                     ],
@@ -174,7 +209,9 @@ class NikeShoesDetails extends StatelessWidget {
                           Icons.shopping_cart,
                           color: Colors.white,
                         ),
-                        onPressed: () {})
+                        onPressed: () {
+                          _openShoppingCart(context);
+                        })
                   ],
                 ),
               ),
@@ -183,7 +220,7 @@ class NikeShoesDetails extends StatelessWidget {
                     left: 0,
                     right: 0,
                     bottom: value ? 0.0 : -kToolbarHeight / 4,
-                    duration: const Duration(milliseconds: 200),
+                    duration: const Duration(milliseconds: 500),
                     child: child!);
               })
         ],

@@ -1,9 +1,9 @@
 import 'package:earling/Screens/shake_transition.dart';
-import 'package:earling/models/nike_shoes.dart';
+import 'package:earling/Screens/nike_shoes.dart';
 import 'package:earling/views/nike_shoes_details.dart';
 import 'package:flutter/material.dart';
 
-
+ 
 class MainNikeShoesStore extends StatelessWidget {
   MainNikeShoesStore({super.key});
 
@@ -18,11 +18,11 @@ class MainNikeShoesStore extends StatelessWidget {
       return FadeTransition(
         opacity: animation1,
         child: NikeShoesDetails(),
-      );
+      ); 
     }));
     notifierBottonBarVisible.value = true; // Muestra la barra de nuevo al regresar
   }
-
+   
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,34 +1,39 @@
 import 'package:earling/Screens/shake_transition.dart';
-import 'package:earling/models/nike_shoes.dart';
+import 'package:earling/Screens/nike_shoes.dart';
 import 'package:earling/views/Home/nike_shopping_card.dart';
 import 'package:flutter/material.dart';
 
-class NikeShoesDetails extends StatelessWidget {
-  final ValueNotifier<bool> notifierBottonBarVisible = ValueNotifier(false);
+class NikeShoesDetails extends StatefulWidget {
 
   NikeShoesDetails({super.key});
 
-  void _openShoppingCart(BuildContext context) async{
+  @override 
+  State<NikeShoesDetails> createState() => _NikeShoesDetailsState();
+}
+
+class _NikeShoesDetailsState extends State<NikeShoesDetails> {
+  final ValueNotifier<bool> notifierBottonBarVisible = ValueNotifier(false);
+
+  void _openShoppingCart(BuildContext context, shoes) async{
     notifierBottonBarVisible.value = false;
     await Navigator.of(context).push(PageRouteBuilder(pageBuilder: (_, animation1, __){
       return FadeTransition(opacity: animation1,
-      child: NikeShoppingCard( shoes: shoes.first,),
+      child: NikeShoppingCard( shoes: shoes[0],),
       );
     }));
     notifierBottonBarVisible.value = true;
   }
 
-
-
   Widget _buildCarrousel(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    
     return SizedBox(
       height: size.height * 0.5,
       child: Stack(
         children: [
           Positioned.fill(
               child: Hero(
-            tag: 'background_${shoes[1]}', // aqui fijate
+            tag: 'background_$shoes', // aqui fijate
             child: Container(
               color: Color(0xFFF6F6F6),
             ),
@@ -38,7 +43,7 @@ class NikeShoesDetails extends StatelessWidget {
             right: 70,
             top: 10,
             child: Hero(
-              tag: 'number_${shoes[1]}',
+              tag: 'number_$shoes',
               child: ShakeTransition(
                 //axis: Axi.Vertical,
                 duration: Duration(milliseconds: 1400),
@@ -46,7 +51,7 @@ class NikeShoesDetails extends StatelessWidget {
                   color: Colors.transparent,
                   child: FittedBox(
                     child: Text(
-                      'number_${shoes[1]}',
+                      'number_$shoes',
                       style: TextStyle(color: Colors.black.withOpacity(0.05), fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -210,7 +215,7 @@ class NikeShoesDetails extends StatelessWidget {
                           color: Colors.white,
                         ),
                         onPressed: () {
-                          _openShoppingCart(context);
+                          _openShoppingCart(context, shoes);
                         })
                   ],
                 ),

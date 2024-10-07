@@ -1,4 +1,4 @@
-import 'package:earling/models/nike_shoes.dart';
+import 'package:earling/Screens/nike_shoes.dart';
 import 'package:flutter/material.dart';
 
 const _buttonSizeWidth = 160.0;
@@ -113,9 +113,12 @@ class _NikeShoppingCardState extends State<NikeShoppingCard>
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
+ @override
+Widget build(BuildContext context) {
+  try {
     final size = MediaQuery.of(context).size;
+    print("Size: $size"); // Verifica el tamaño aquí
+
     return Material(
       color: Colors.transparent,
       child: AnimatedBuilder(
@@ -124,90 +127,102 @@ class _NikeShoppingCardState extends State<NikeShoppingCard>
           final buttonSizeWidth = (_buttonSizeWidth * _animationResize.value)
               .clamp(_buttonCircularSize, _buttonSizeWidth);
           
-          final panelSizeWidth = (size.width * _animationResize.value).clamp(_buttonCircularSize, size.width);
-          return Stack(
-            fit: StackFit.expand,
-            children: [
-              Positioned.fill(
+          final panelSizeWidth = (size.width * _animationResize.value)
+              .clamp(_buttonCircularSize, size.width);
+          return Container(
+            
+            height: 100, // Asegúrate de que el contenedor tenga un tamaño finito
+            width: 100,
+            child: Stack(
+              children: [
+                Positioned.fill(
                   child: GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: Container(
-                  color: Colors.black12,
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Container(
+                      color: Colors.black12,
+                    ),
+                  ),
                 ),
-              )),
-              Positioned(
-                left: 0,
-                right: 0,
-                bottom: 0,
-                child: Stack(
-                  children: [
-                    if(_animationMovementIn.value != 1)
-                    Positioned(
-                      top: size.height * 0.4 + (_animationMovementIn.value * size.height * 0.45),
-                      width: panelSizeWidth,
-                      left: size.width / 2 - panelSizeWidth / 2,
-                      child: _buildPanel())
-                    ,
-                    Positioned(
-                      
-                      left: size.width / 2 - buttonSizeWidth / 2,
-                      bottom: 40.0 - (_animationMovementOut.value * 100), 
-                      child: TweenAnimationBuilder(
-                        curve: Curves.fastLinearToSlowEaseIn,
-                        tween: Tween(begin: 1.0, end: 0.0),
-                        duration: const Duration(milliseconds: 400),
-                        builder: (context, value, child) {
-                          return Transform.translate(
-                              offset: Offset(0.0, value * -size.height * 0.6));
-                        },
-                        child: InkWell(
-                          onTap: () {
-                            _controller.forward();
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  top: 500,
+                  child: Stack(
+                    children: [
+                      if (_animationMovementIn.value != 1)
+                        Positioned(
+                          top: size.height * 0.4 +
+                              (_animationMovementIn.value * size.height * 0.45),
+                          width: panelSizeWidth,
+                          left: size.width / 2 - panelSizeWidth / 2,
+                          child: _buildPanel(),
+                        ),
+                      Positioned(
+                        left: size.width / 2 - buttonSizeWidth / 2,
+                        bottom: 40.0 - (_animationMovementOut.value * 100),
+                        child: TweenAnimationBuilder(
+                          curve: Curves.fastLinearToSlowEaseIn,
+                          tween: Tween(begin: 1.0, end: 0.0),
+                          duration: const Duration(milliseconds: 400),
+                          builder: (context, value, child) {
+                            return Transform.translate(
+                                offset: Offset(0.0, value * -size.height * 0.6));
                           },
-                          child: Container(
-                            width: buttonSizeWidth,
-                            height: (_buttonSizeHeigth * _animationResize.value)
-                                .clamp(_buttonCircularSize, _buttonSizeWidth),
-                            decoration: const BoxDecoration(
-                                color: Colors.black,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(30))),
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(vertical: 12.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Expanded(
-                                    child: Icon(
-                                      Icons.shopping_cart,
-                                      color: Colors.white,
+                          child: InkWell(
+                            onTap: () {
+                              _controller.forward();
+                            },
+                            child: Container(
+                              width: buttonSizeWidth,
+                              height: (_buttonSizeHeigth * _animationResize.value)
+                                  .clamp(_buttonCircularSize, _buttonSizeWidth),
+                              decoration: const BoxDecoration(
+                                  color: Colors.black,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(30))),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(vertical: 12.0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Expanded(
+                                      child: Icon(
+                                        Icons.shopping_cart,
+                                        color: Colors.white,
+                                      ),
                                     ),
-                                  ),
-                                  if (_animationResize.value == 1) ...[
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      'ADD TO CARD',
-                                      style: TextStyle(color: Colors.white),
-                                    )
-                                  ]
-                                ],
+                                    if (_animationResize.value == 1) ...[
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        'ADD TO CART',
+                                        style: TextStyle(color: Colors.white),
+                                      )
+                                    ]
+                                  ],
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    )
-                  ],
-                ),
-              )
-            ],
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
           );
         },
       ),
     );
+  } catch (e) {
+    print("Error: $e"); // Captura cualquier error
+    return Center(child: Text("Ocurrió un error: $e")); // Opcional: Mostrar un mensaje de error
   }
+}
+
 }

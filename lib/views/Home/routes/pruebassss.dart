@@ -31,11 +31,9 @@ class _NikeShoppingCardState extends State<NikeShoppingCard>
         parent: _controller, curve: (const Interval(0.0, 0.4))));
     _animationMovementIn = Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
         parent: _controller,
-        curve:
-            (const Interval(0.3, 0.6, curve: Curves.fastLinearToSlowEaseIn))));
+        curve: (const Interval(0.3, 0.6, curve: Curves.fastLinearToSlowEaseIn))));
     _animationMovementOut = Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-        parent: _controller,
-        curve: (const Interval(0.6, 1.0, curve: Curves.elasticIn))));
+        parent: _controller, curve: (const Interval(0.7, 1.0, curve: Curves.elasticIn))));
 
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
@@ -52,30 +50,28 @@ class _NikeShoppingCardState extends State<NikeShoppingCard>
 
   Widget _buildPanel() {
     final size = MediaQuery.of(context).size;
-    final currentImageSize = (_iamgenSize * _animationResize.value)
-        .clamp(_finalImageSize, _iamgenSize);
-
+    final currentImageSize =
+        (_iamgenSize * _animationResize.value).clamp(_finalImageSize, _iamgenSize);
+        
     return Container(
-      height: (size.height * 0.6 * _animationResize.value)
-          .clamp(_buttonCircularSize, size.height * 0.6),
+      height: (size.height * 0.4 * _animationResize.value).clamp(
+          _buttonCircularSize, size.height * 0.4),
       width: (size.width * _animationResize.value)
           .clamp(_buttonCircularSize, size.width),
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
-              topLeft: const Radius.circular(30),
-              topRight: const Radius.circular(30),
+              topLeft: Radius.circular(30),
+              topRight: Radius.circular(30),
               bottomLeft: _animationResize.value == 1
-                  ? const Radius.circular(0)
+                  ? Radius.circular(0)
                   : const Radius.circular(30),
               bottomRight: _animationResize.value == 1
-                  ? const Radius.circular(0)
+                  ? Radius.circular(0)
                   : const Radius.circular(30))),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisAlignment: _animationResize.value == 1
-            ? MainAxisAlignment.start
-            : MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Padding(
             padding: const EdgeInsets.all(5.0),
@@ -84,11 +80,9 @@ class _NikeShoppingCardState extends State<NikeShoppingCard>
                   ? MainAxisAlignment.start
                   : MainAxisAlignment.center,
               children: [
-                ClipOval(
-                  child: Image.asset(
-                    widget.shoes.images.first,
-                    height: currentImageSize,
-                  ),
+                Image.asset(
+                  widget.shoes.images.first,
+                  height: currentImageSize,
                 ),
                 if (_animationResize.value == 1) ...[
                   const SizedBox(
@@ -119,7 +113,6 @@ class _NikeShoppingCardState extends State<NikeShoppingCard>
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-
     return Material(
       color: Colors.transparent,
       child: AnimatedBuilder(
@@ -129,11 +122,6 @@ class _NikeShoppingCardState extends State<NikeShoppingCard>
               .clamp(_buttonCircularSize, _buttonSizeWidth);
           final panelSizeWidth = (size.width * _animationResize.value)
               .clamp(_buttonCircularSize, size.width);
-          final buttonSize = _animationResize.value == 1
-              ? _buttonCircularSize
-              : (_buttonSizeWidth * _animationResize.value)
-                  .clamp(_buttonCircularSize, _buttonSizeWidth);
-
           return Stack(
             children: [
               Positioned.fill(
@@ -146,65 +134,51 @@ class _NikeShoppingCardState extends State<NikeShoppingCard>
                   ),
                 ),
               ),
-              Positioned.fill(
-                  child: Stack(
-                children: [
-                  if (_animationMovementIn.value != 1)
-                    Positioned(
-                      top: size.height * 0.4 +
-                          (_animationMovementIn.value * size.height * 0.465),
-                      left: size.width / 2 - panelSizeWidth / 2,
-                      //bottom: size.height * 0.3,
-
-                      child: _buildPanel(),
-                    ),
-                  Positioned(
-                    left: size.width / 2 - buttonSizeWidth / 2,
-                    bottom: 40.0 - (_animationMovementOut.value * 100),
-                    child: InkWell(
-                      onTap: () {
-                        _controller.forward();
-                      },
-                      child: Container(
-                        width: buttonSize,
-                        height: buttonSize
-                            .clamp(_buttonCircularSize, _buttonSizeWidth),
-                        decoration: const BoxDecoration(
-                            color: Colors.black,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(30)),
-                                
-                                ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 12.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Expanded(
-                                child: Icon(
-                                  Icons.shopping_cart,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              if (_animationResize.value == 1) ...[
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Flexible(
-                                  child: Text(
-                                    'ADD TO CART',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                )
-                              ]
-                            ],
+              Positioned(
+                bottom: size.height * 0.3,
+                left: size.width / 2 - panelSizeWidth / 2,
+                child: _buildPanel(),
+              ),
+              Positioned(
+                left: size.width / 2 - buttonSizeWidth / 2,
+                bottom: 40.0 - (_animationMovementOut.value * 140),
+                child: InkWell(
+                  onTap: () {
+                    _controller.forward();
+                  },
+                  child: Container(
+                    width: buttonSizeWidth,
+                    height: (_buttonSizeHeigth * _animationResize.value)
+                        .clamp(_buttonCircularSize, _buttonSizeWidth),
+                    decoration: const BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.all(Radius.circular(30))),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 12.0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Expanded(
+                            child: Icon(
+                              Icons.shopping_cart,
+                              color: Colors.white,
+                            ),
                           ),
-                        ),
+                          if (_animationResize.value == 1) ...[
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              'ADD TO CART',
+                              style: TextStyle(color: Colors.white),
+                            )
+                          ]
+                        ],
                       ),
                     ),
-                  )
-                ],
-              )),
+                  ),
+                ),
+              )
             ],
           );
         },

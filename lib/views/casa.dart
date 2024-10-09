@@ -1,5 +1,3 @@
-import 'package:earling/Screens/nike_shoes.dart';
-import 'package:earling/views/prueba.dart';
 import 'package:flutter/material.dart';
 
 class CasaHome extends StatefulWidget {
